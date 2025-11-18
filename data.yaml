@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 12
+names: ['MM_regular', 'MM_yellow', 'Snickers', 'Trolli', 'airheads', 'milky_way', 'musketeers', 'nerds', 'skittles', 'starburst', 'three', 'twizzlers']
+
+roboflow:
+  workspace: crisafstraining
+  project: candy-detector-bke6a
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/crisafstraining/candy-detector-bke6a/dataset/4
