@@ -1,61 +1,55 @@
 from ultralytics import YOLO
 
 def train_model():
-    model = YOLO("yolo11l.pt")    # use LARGE model for small datasets
+    model = YOLO("yolo11s.pt")
 
     model.train(
         data="data.yaml",
-        epochs=200,
-        imgsz=640,
-        batch=32,
+
+        # ---- SPEED / SIZE ----
+        epochs=30,              # was 60 – this will cut total work in half
+        imgsz=640,              # if still slow, change to 512
+        batch=8,                # was -1 (auto picked ~3). Try 8; lower if OOM.
         device=0,
-        workers=0,
+        workers=2,
 
-        # ----------------------
-        # AUGMENTATION SETTINGS
-        # ----------------------
-        mosaic=1.0,              # turn on mosaic augmentation
-        mixup=0.2,               # mix images
-        copy_paste=0.3,          # paste objects between images
-        hsv_h=0.015,             # color aug (Hue)
-        hsv_s=0.7,               # Saturation
-        hsv_v=0.4,               # Value (brightness)
-        perspective=0.0005,      # slight perspective warp
-        degrees=10,              # random rotation
-        translate=0.1,           # shifting
-        scale=0.5,               # zoom out
-        shear=2.0,               # shear transform
-        flipud=0.1,              # vertical flip
-        fliplr=0.5,              # horizontal flip
+        # ---- AUGMENTATION (light) ----
+        mosaic=0.4,
+        mixup=0.0,
+        copy_paste=0.0,
+        hsv_h=0.015,
+        hsv_s=0.5,
+        hsv_v=0.3,
+        perspective=0.0005,
+        degrees=5.0,
+        translate=0.05,
+        scale=0.5,
+        shear=0.0,
+        flipud=0.0,
+        fliplr=0.5,
 
-        # ----------------------
-        # REGULARIZATION
-        # ----------------------
+        # ---- REGULARIZATION ----
         dropout=0.0,
-        label_smoothing=0.1,
+        # label_smoothing removed (deprecated in your log)
 
-        # ----------------------
-        # OPTIMIZER / LR CONTROL
-        # ----------------------
-        optimizer="AdamW",       # very good for small datasets
-        lr0=0.001,               # starting learning rate
-        lrf=0.01,                # final LR fraction
+        # ---- OPTIMIZER / LR ----
+        optimizer="auto",
+        lr0=0.005,
+        lrf=0.02,
         momentum=0.937,
         weight_decay=0.0005,
 
-        # ----------------------
-        # TRAINING SETTINGS
-        # ----------------------
-        patience=50,             # early stopping for small datasets
+        # ---- TRAINING CONTROL ----
+        patience=10,            # early stop sooner
         warmup_epochs=3.0,
         warmup_bias_lr=0.1,
         warmup_momentum=0.8,
-        close_mosaic=10,         # disable mosaic in last X epochs
-        val=True,                # run validation
+        close_mosaic=10,
+        val=True,
 
-        # optional but good
         cache=False,
-        deterministic=True,
+        deterministic=False,
+        plots=False,            # small speed win / less I/O
     )
 
 if __name__ == "__main__":

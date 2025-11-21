@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# YOLO / training artifacts
+runs/
+
+# Weights / models
+*.pt
+
+/train
+/valid
+/test

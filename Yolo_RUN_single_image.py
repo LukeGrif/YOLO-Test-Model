@@ -1,12 +1,10 @@
+import sys
 from ultralytics import YOLO
 import cv2
 
-def run_single_image():
+def run_single_image(img_path):
     # Path to your trained model
     model = YOLO(r"C:\Users\Alparslan\Documents\PhD\YOLO\Test\runs\detect\train7\weights\best.pt")
-
-    # Path to your image
-    img_path = r"C:\Users\Alparslan\Pictures\American-Candy-Birdseye-View-1024x808-1973507652.jpg"
 
     # Read the image
     img = cv2.imread(img_path)
@@ -19,7 +17,7 @@ def run_single_image():
         img,
         imgsz=640,
         conf=0.48,
-        device=0      # GPU (same as training)
+        device=0
     )
 
     # Draw bounding boxes
@@ -37,4 +35,9 @@ def run_single_image():
 
 
 if __name__ == "__main__":
-    run_single_image()
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <path_to_image>")
+        sys.exit(1)
+
+    img_path = sys.argv[1]
+    run_single_image(img_path)
